@@ -1,14 +1,14 @@
 [
 {
-  "modid": "moleculargems",
-  "name": "Molecular Gems",
-  "description": "A mod where magical energy meets mechanical use.",
-  "version": "0.0.6",
+  "modid": "doomshrine",
+  "name": "Doom Shrine",
+  "description": "A Minecraft mod that makes players feed items, liquids or energy to the gods in order to survive.",
+  "version": "0.3.4",
   "mcversion": "${mcversion}",
-  "url": "https://github.com/MoreThanHidden/MolecularGems",
+  "url": "https://github.com/MoreThanHidden/DoomShrine",
   "updateUrl": "",
-  "authorList": ["MoreThanHidden(John816)"],
-  "credits": "To: Forge, COFH and IC2 for the API that make this mod possible.",
+  "authorList": ["MoreThanHidden"],
+  "credits": "The Modding Community, Forge Team and JaddedCat for the mod idea",
   "logoFile": "/logo.png",
   "screenshots": [],
   "dependencies": []

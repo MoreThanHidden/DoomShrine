@@ -35,10 +35,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 	@Mod(modid="DoomShrine", name="Doom Shrine", version="0.3.4")
-	//@NetworkMod(clientSideRequired=true) // not used in 1.7
+	
 	public class DoomShrine {
-			//Items I have Added
-
+		
 			public static Block doomShrineBlock;
 			
 	        @Instance(value = "DoomShrine")
