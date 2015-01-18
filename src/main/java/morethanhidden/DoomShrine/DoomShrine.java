@@ -34,7 +34,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-	@Mod(modid="DoomShrine", name="Doom Shrine", version="0.0.1")
+	@Mod(modid="DoomShrine", name="Doom Shrine", version="0.3.4")
 	//@NetworkMod(clientSideRequired=true) // not used in 1.7
 	public class DoomShrine {
 			//Items I have Added
@@ -44,7 +44,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 	        @Instance(value = "DoomShrine")
 	        public static DoomShrine instance;
 	        
-	        @SidedProxy(clientSide="morethanhidden.DoomShrine.Client.ClientProxy", serverSide="morethanhidden.DoomShine.common")
+	        @SidedProxy(clientSide="morethanhidden.DoomShrine.Client.ClientProxy", serverSide="morethanhidden.DoomShrine.common")
 	        public static common proxy;
 	        
 	        @EventHandler
@@ -60,8 +60,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 	        };
 	        
 	        @EventHandler
-	        public void preInit(FMLPreInitializationEvent event) {  
-	        	
+	        public void init(FMLInitializationEvent event)
+	        {
 	        	//Register Handlers
 	        	TickHandler tickHandler = new TickHandler();
 	            FMLCommonHandler.instance().bus().register(tickHandler);
@@ -69,7 +69,11 @@ import cpw.mods.fml.relauncher.SideOnly;
 	        	DoomEventHandler eventHandler = new DoomEventHandler();
 	            MinecraftForge.EVENT_BUS.register(eventHandler);
 	            FMLCommonHandler.instance().bus().register(eventHandler);
-
+	        }
+	        
+	        @EventHandler
+	        public void preInit(FMLPreInitializationEvent event) {  
+	        	
 	        	
 	        	doomShrineBlock = new DoomShrineBlock();
 	        	
@@ -81,7 +85,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 	        public void load(FMLInitializationEvent event) {
 	        	proxy.registerRenderers();
 	        	addNames();
-	                 
 	        }
 	        
 	        public static void addNames(){

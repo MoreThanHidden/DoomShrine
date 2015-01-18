@@ -1,6 +1,5 @@
 package morethanhidden.DoomShrine;
 
-import morethanhidden.DoomShrine.api.ShrineItemRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -155,17 +154,6 @@ public class TileDoomShrine extends TileEntity implements IInventory{
 		@Override
 		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 			return true;
-		}
-		
-		@Override
-		public void updateEntity(){
-			
-			int AdditionalTime = ShrineItemRegistry.getTimeforItem(this.getStackInSlot(0));
-            
-			if (AdditionalTime != 0){
-            setInventorySlotContents(0, null);
-		    }
-			
 		}
 }
 

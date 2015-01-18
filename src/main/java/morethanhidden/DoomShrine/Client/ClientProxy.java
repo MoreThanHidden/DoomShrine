@@ -22,9 +22,13 @@ public class ClientProxy extends common {
 	@Override
 		public void registerRenderers() {
 		
+		//Doom Shrine
         ClientRegistry.bindTileEntitySpecialRenderer(TileDoomShrine.class, new RenderDoomShrine());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(DoomShrine.doomShrineBlock), new RenderDoomShrineItem(new RenderDoomShrine(), new TileDoomShrine()));
+        
+        //GUI
         MinecraftForge.EVENT_BUS.register(new GuiDoomShrine(Minecraft.getMinecraft()));
+        
 	}
 	
 
