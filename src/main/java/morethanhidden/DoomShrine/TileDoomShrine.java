@@ -1,11 +1,16 @@
 package morethanhidden.DoomShrine;
 
+import morethanhidden.DoomShrine.api.ShrineItemRegistry;
+import morethanhidden.DoomShrine.entity.ExtendedPlayerData;
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.Packet;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
@@ -18,10 +23,15 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import cpw.mods.fml.common.Optional;
 
+import java.util.List;
+
 
 public class TileDoomShrine extends TileEntity implements IInventory{
 	
 	private ItemStack[] inventory;
+	private String Owner;
+	protected DataWatcher dataWatcher;
+	private int Owner_DataID = 12;
 
 	public TileDoomShrine(){
 		this.inventory = new ItemStack[1];
@@ -32,7 +42,8 @@ public class TileDoomShrine extends TileEntity implements IInventory{
         super.readFromNBT(data);
         
         NBTTagList tagList = data.getTagList("Inventory", Constants.NBT.TAG_COMPOUND);
-        
+		Owner = data.getString("Owner");
+
         for (int i = 0; i < tagList.tagCount(); i++)
         	        {
         	            NBTTagCompound tag = (NBTTagCompound) tagList.getCompoundTagAt(i);
@@ -44,12 +55,13 @@ public class TileDoomShrine extends TileEntity implements IInventory{
         	            }
         	        }
     }
-	
+
 	@Override
     public void writeToNBT(NBTTagCompound data) {
         super.writeToNBT(data);
         
         NBTTagList itemList = new NBTTagList();
+		data.setString("OwnerName", Owner);
 
         for (int i = 0; i < inventory.length; i++)
         {
@@ -65,6 +77,7 @@ public class TileDoomShrine extends TileEntity implements IInventory{
         }
         
         data.setTag("Inventory", itemList);
+
     }
  
     
@@ -123,6 +136,14 @@ public class TileDoomShrine extends TileEntity implements IInventory{
 	        }
 		}
 
+		public void setOwner(String OwnerName){
+			this.Owner = OwnerName;
+		}
+
+		public String getOwner() {
+			return this.Owner;
+		}
+
 		@Override
 		public String getInventoryName() {
 			return "TestBlock";
@@ -144,7 +165,8 @@ public class TileDoomShrine extends TileEntity implements IInventory{
 		}
 
 		@Override
-		public void openInventory() {			
+		public void openInventory() {
+
 		}
 
 		@Override
@@ -154,6 +176,25 @@ public class TileDoomShrine extends TileEntity implements IInventory{
 		@Override
 		public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
 			return true;
+		}
+
+		@Override
+		public void updateEntity(){
+
+			if (this.worldObj.canBlockSeeTheSky(this.xCoord, this.yCoord + 1, this.zCoord)){
+
+				if (getStackInSlot(0) != null){
+
+					int Time = ShrineItemRegistry.getTimeforItem(this.getStackInSlot(0));
+
+					if (Time != 0) {
+						EntityPlayer player = MinecraftServer.getServer().getConfigurationManager().func_152612_a(Owner);
+						ExtendedPlayerData properties = ExtendedPlayerData.get(player);
+						properties.increaseShrineTimer(Time);
+						setInventorySlotContents(0, null);
+					}
+				}
+			}
 		}
 }
 

@@ -4,6 +4,9 @@ import morethanhidden.DoomShrine.blocks.DoomShrineBlock;
 import morethanhidden.DoomShrine.handler.DoomEventHandler;
 import morethanhidden.DoomShrine.handler.GuiDoomShrine;
 import morethanhidden.DoomShrine.handler.TickHandler;
+import morethanhidden.DoomShrine.items.Leaf;
+import morethanhidden.DoomShrine.items.Scriptures;
+import morethanhidden.DoomShrine.items.ShrineStaff;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -40,6 +43,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 		
 			public static Block doomShrineBlock;
 			
+			public static Item shrineStaffItem;
+			public static Item leafItem;
+			public static Item shrineScripturesItem;
+			
 	        @Instance(value = "DoomShrine")
 	        public static DoomShrine instance;
 	        
@@ -75,9 +82,15 @@ import cpw.mods.fml.relauncher.SideOnly;
 	        	
 	        	
 	        	doomShrineBlock = new DoomShrineBlock();
+	    		shrineStaffItem = new ShrineStaff();
+				leafItem = new Leaf();
+				shrineScripturesItem = new Scriptures();
 	        	
 	        	GameRegistry.registerTileEntity(TileDoomShrine.class, "TileDoomShrine");
 	        	GameRegistry.registerBlock(doomShrineBlock, "DoomShrine");
+	        	GameRegistry.registerItem(shrineStaffItem, "ShrineStaff");
+	        	GameRegistry.registerItem(leafItem, "Leaf");
+	        	GameRegistry.registerItem(shrineScripturesItem, "ShrineScriptures");
 	        }
 	        
 	        @EventHandler 
@@ -87,8 +100,13 @@ import cpw.mods.fml.relauncher.SideOnly;
 	        }
 	        
 	        public static void addNames(){
+	        	//Temporary Naming
 	                LanguageRegistry.addName(doomShrineBlock, "Doom Shrine");
+	                LanguageRegistry.addName(shrineStaffItem, "Shrine Staff");
+	                LanguageRegistry.addName(leafItem, "Leaf");
+	                LanguageRegistry.addName(shrineScripturesItem, "Shrine Scriptures");
 	                LanguageRegistry.instance().addStringLocalization("itemGroup.Doom Shrine", "en_US", "Doom Shrine");
+	        
 	        }
 	        
 	        @EventHandler

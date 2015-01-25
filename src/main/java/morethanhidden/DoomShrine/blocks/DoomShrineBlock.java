@@ -34,11 +34,11 @@ import net.minecraft.world.World;
 public class DoomShrineBlock extends BlockContainer
 {
     private ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-    
+
 	public DoomShrineBlock()
 	{
 		super(Material.rock);
-		setBlockName("TestBlock");
+		setBlockName("DoomShrine");
 		setCreativeTab(DoomShrine.tabdoomshrine);
 		setStepSound(soundTypePiston);
 		setHardness(3.0F);
@@ -52,26 +52,34 @@ public class DoomShrineBlock extends BlockContainer
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int par6, float par7, float par8, float par9){
 		
 		TileDoomShrine te = (TileDoomShrine) world.getTileEntity(x, y, z);
-		
-		 if (te == null || player.isSneaking()){
-	            return false;
-	     }
-		 
+
+		if (te == null || player.isSneaking()){
+			return false;
+	    }
+
 		 ItemStack playerItem = player.getCurrentEquippedItem();
-		 
-		 if (te.getStackInSlot(0) == null && playerItem != null)
-	        {
-	            ItemStack newItem = playerItem.copy();
-	            newItem.stackSize = 1;
-	            --playerItem.stackSize;
-	            te.setInventorySlotContents(0, newItem);
-	     }else if (te.getStackInSlot(0) != null && playerItem == null)
-	     {
-	            player.inventory.addItemStackToInventory(te.getStackInSlot(0));
-	            te.setInventorySlotContents(0, null);
-	     }
-		 
-		 world.markBlockForUpdate(x, y, z);
+
+		if (te.getOwner() == null){
+			te.setOwner(player.getCommandSenderName());
+		}
+
+		if (te.getOwner() == player.getCommandSenderName()) {
+
+			if (te.getStackInSlot(0) == null && playerItem != null) {
+				ItemStack newItem = playerItem.copy();
+				newItem.stackSize = 1;
+				--playerItem.stackSize;
+				te.setInventorySlotContents(0, newItem);
+
+
+			} else if (te.getStackInSlot(0) != null && playerItem == null) {
+				player.inventory.addItemStackToInventory(te.getStackInSlot(0));
+				te.setInventorySlotContents(0, null);
+			}
+
+		}else if (world.isRemote){player.addChatComponentMessage(new ChatComponentTranslation("Sorry this Shrine belongs to: " + te.getOwner()));}
+
+		world.markBlockForUpdate(x, y, z);
 		return true;
 		
 	} 
@@ -87,7 +95,18 @@ public class DoomShrineBlock extends BlockContainer
 			}
 		return super.removedByPlayer(world, player, x, y, z, willHarvest);
 	}
-	
+
+	@Override
+	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityLivingBase, ItemStack par6ItemStack){
+		if( entityLivingBase instanceof EntityPlayer ) {
+			EntityPlayer player = (EntityPlayer) entityLivingBase;
+
+			final TileDoomShrine te = (TileDoomShrine) world.getTileEntity(x, y, z);
+
+			te.setOwner(player.getCommandSenderName());
+		}
+	}
+
 	@Override
 	public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
 		ret.add(new ItemStack (DoomShrine.doomShrineBlock, 1));
