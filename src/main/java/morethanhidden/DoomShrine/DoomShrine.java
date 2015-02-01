@@ -1,9 +1,13 @@
 package morethanhidden.DoomShrine;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import morethanhidden.DoomShrine.blocks.DoomShrineBlock;
 import morethanhidden.DoomShrine.handler.DoomEventHandler;
 import morethanhidden.DoomShrine.handler.GuiDoomShrine;
 import morethanhidden.DoomShrine.handler.TickHandler;
+import morethanhidden.DoomShrine.integration.tweaker.MineTweakerIntegration;
 import morethanhidden.DoomShrine.items.Leaf;
 import morethanhidden.DoomShrine.items.Scriptures;
 import morethanhidden.DoomShrine.items.ShrineStaff;
@@ -23,6 +27,7 @@ import net.minecraftforge.common.ChestGenHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -37,7 +42,7 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-	@Mod(modid="DoomShrine", name="Doom Shrine", version="0.3.4")
+	@Mod(modid="DoomShrine", name="Doom Shrine", version="0.3.5")
 	
 	public class DoomShrine {
 		
@@ -47,7 +52,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 			public static Item leafItem;
 			public static Item shrineScripturesItem;
 			
-	        @Instance(value = "DoomShrine")
+			public static Logger logger = LogManager.getLogger("DoomShrine");
+	        
+			@Instance(value = "DoomShrine")
 	        public static DoomShrine instance;
 	        
 	        @SidedProxy(clientSide="morethanhidden.DoomShrine.Client.ClientProxy", serverSide="morethanhidden.DoomShrine.common")
@@ -93,6 +100,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 	        	GameRegistry.registerItem(shrineScripturesItem, "ShrineScriptures");
 	        }
 	        
+	        
 	        @EventHandler 
 	        public void load(FMLInitializationEvent event) {
 	        	proxy.registerRenderers();
@@ -111,6 +119,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 	        
 	        @EventHandler
 	        public void postInit(FMLPostInitializationEvent event) {
+	        	if(Loader.isModLoaded("MineTweaker3")) {
+	        		MineTweakerIntegration.register();
+	        		DoomShrine.logger.info("Loaded MineTweaker 3 Integration");
+	        	}
 	        	
 	        }
 	        
